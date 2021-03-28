@@ -19,7 +19,7 @@ namespace SmartCharging.Application.Commands
             _groupRepository = groupRepository;
         }
 
-        public async Task<bool> Execute(ChargeStatioUpdateInputModel chargeStationInput, string groupId)
+        public async Task<bool> Execute(UpdateChargeStationInputModel chargeStationInput, string groupId)
         {
             var group = await _groupRepository.GetGroupById(groupId);
 
@@ -49,7 +49,7 @@ namespace SmartCharging.Application.Commands
             return true;
         }
 
-        private static void AddConnectors(ChargeStatioUpdateInputModel chargeStationInput, ChargeStation chargeStation)
+        private static void AddConnectors(UpdateChargeStationInputModel chargeStationInput, ChargeStation chargeStation)
         {
             if (chargeStationInput.Connectors != null)
             {

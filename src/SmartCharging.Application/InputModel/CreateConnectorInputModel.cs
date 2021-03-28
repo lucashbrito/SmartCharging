@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SmartCharging.Application.InputModel
 {
-    public class ConnectorInputModel
+    public class CreateConnectorInputModel
     {
-        public int MaxCurrentAmps { get;  set; }
-        public string ChargeStationId { get;  set; }
+        public int MaxCurrentAmps { get;  set; }        
     }
 }

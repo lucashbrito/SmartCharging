@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SmartCharging.Application.InputModel
 {
-    public class GroupStationInputModel
+    public class UpdateGroupStationInputModel
     {
-        public List<ChargeStationInputModel> ChargeStations { get;  set; }
+        public List<UpdateChargeStationInputModel> ChargeStations { get;  set; }
         public string Name { get;  set; }
         public int CapacityAmps { get;  set; }
     }

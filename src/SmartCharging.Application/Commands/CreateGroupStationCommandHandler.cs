@@ -18,7 +18,7 @@ namespace SmartCharging.Application.Commands
             _groupRepository = groupRepository;
         }
 
-        public async Task<bool> Execute(GroupStationInputModel groupStationInput)
+        public async Task<bool> Execute(CreateGroupStationInputModel groupStationInput)
         {
             var group = new GroupStation(groupStationInput.Name, groupStationInput.CapacityAmps);
 
@@ -33,6 +33,15 @@ namespace SmartCharging.Application.Commands
                 group.AddChargeStation(newChargStation);
             });
 
+            if (group.IsCapacityOfGroup() > group.CapacityAmps)
+            {
+                var numberOfExcessConnector = group.IsCapacityOfGroup() - group.CapacityAmps;
+
+                HandlerMessage = $"The capactiy of Connector was excessed. You may remove {numberOfExcessConnector} of Connectors";
+
+                return false;
+            }
+
             await _groupRepository.Add(group);
 
             HandlerMessage = "Group has been added";
@@ -40,7 +49,7 @@ namespace SmartCharging.Application.Commands
             return true;
         }
 
-        private static List<Connector> CreateConnectors(ChargeStationInputModel chargeStation, ChargeStation newChargStation)
+        private static List<Connector> CreateConnectors(CreateChargeStationInputModel chargeStation, ChargeStation newChargStation)
         {
             var newConnectorList = new List<Connector>(chargeStation.Connectors.Count);
 

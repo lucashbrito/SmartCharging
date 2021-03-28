@@ -65,5 +65,14 @@ namespace SmartCharging.Domain
             }
 
         }
+
+        public int IsCapacityOfGroup()
+        {
+            if (ChargeStations.Any() && ChargeStations.Select(c => c.Connectors).Any())
+            {
+                return ChargeStations.Select(c => c.Connectors.Sum(c => c.MaxCurrentAmps)).Sum();
+            }
+            return 0;
+        }
     }
 }

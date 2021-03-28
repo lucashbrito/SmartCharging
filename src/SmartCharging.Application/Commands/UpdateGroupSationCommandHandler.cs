@@ -18,7 +18,7 @@ namespace SmartCharging.Application.Commands
             _groupRepository = groupRepository;
         }
 
-        public async Task<bool> Execute(GroupStationInputModel groupStationInput, string groupId)
+        public async Task<bool> Execute(UpdateGroupStationInputModel groupStationInput, string groupId)
         {
             var group = await _groupRepository.GetGroupById(groupId);
 

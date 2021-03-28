@@ -52,7 +52,7 @@ namespace SmartCharging.API.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateGroup(GroupStationInputModel group, string idGroup)
+        public async Task<IActionResult> UpdateGroup(UpdateGroupStationInputModel group, string idGroup)
         {
             var commandHandler = new UpdateGroupSationCommandHandler(_groupRepository);
             try
@@ -75,8 +75,8 @@ namespace SmartCharging.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddGroup(GroupStationInputModel group)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]       
+        public async Task<IActionResult> CreateGroup(CreateGroupStationInputModel group)
         {
             var commandHandler = new CreateGroupStationCommandHandler(_groupRepository);
             try
@@ -97,10 +97,28 @@ namespace SmartCharging.API.Controllers
             return BadRequest(commandHandler.HandlerMessage);
         }
 
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteGroupById(string id)
+        {
+            try
+            {
+                await _groupRepository.DeleteById(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.Log(LogLevel.Trace, e, "GroupStationController.DeleteById");
+                return BadRequest(e);
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ConnectChargeStationToGroupStation(ChargeStatioUpdateInputModel chargeStationInput, string groupId)
+        public async Task<IActionResult> ConnectChargeStationToGroupStation(UpdateChargeStationInputModel chargeStationInput, string groupId)
         {
             var commandHandler = new ConnectChargeStationToGroupStationCommandHandler(_groupRepository);
             try
@@ -143,25 +161,6 @@ namespace SmartCharging.API.Controllers
             }
 
             return BadRequest(commandHandler.HandlerMessage);
-        }
-
-
-        [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteGroupById(string id)
-        {
-            try
-            {
-                await _groupRepository.DeleteById(id);
-
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                _logger.Log(LogLevel.Trace, e, "GroupStationController.DeleteById");
-                return BadRequest(e);
-            }
         }
     }
 }
