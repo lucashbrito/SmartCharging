@@ -54,13 +54,14 @@ namespace SmartCharging.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateGroup(GroupStationInputModel group, string idGroup)
         {
+            var commandHandler = new UpdateGroupSationCommandHandler(_groupRepository);
             try
             {
-                var result = await new UpdateGroupSationCommandHandler(_groupRepository).Execute(group, idGroup);
+                var result = await commandHandler.Execute(group, idGroup);
 
                 if (result)
                 {
-                    return Ok();
+                    return Ok(commandHandler.HandlerMessage);
                 }
             }
             catch (Exception e)
@@ -69,7 +70,7 @@ namespace SmartCharging.API.Controllers
                 return BadRequest(e);
             }
 
-            return BadRequest();
+            return BadRequest(commandHandler.HandlerMessage);
         }
 
         [HttpPost]
@@ -77,13 +78,14 @@ namespace SmartCharging.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddGroup(GroupStationInputModel group)
         {
+            var commandHandler = new CreateGroupStationCommandHandler(_groupRepository);
             try
             {
-                var result = await new CreateGroupStationCommandHandler(_groupRepository).Execute(group);
+                var result = await commandHandler.Execute(group);
 
                 if (result)
                 {
-                    return Ok();
+                    return Ok(commandHandler.HandlerMessage);
                 }
             }
             catch (Exception e)
@@ -92,7 +94,7 @@ namespace SmartCharging.API.Controllers
                 return BadRequest(e);
             }
 
-            return BadRequest();
+            return BadRequest(commandHandler.HandlerMessage);
         }
 
         [HttpPost]
@@ -100,13 +102,14 @@ namespace SmartCharging.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ConnectChargeStationToGroupStation(ChargeStatioUpdateInputModel chargeStationInput, string groupId)
         {
+            var commandHandler = new ConnectChargeStationToGroupStationCommandHandler(_groupRepository);
             try
             {
-                var result = await new ConnectChargeStationToGroupStationCommandHandler(_groupRepository).Execute(chargeStationInput, groupId);
+                var result = await commandHandler.Execute(chargeStationInput, groupId);
 
                 if (result)
                 {
-                    return Ok();
+                    return Ok(commandHandler.HandlerMessage);
                 }
             }
             catch (Exception e)
@@ -115,7 +118,7 @@ namespace SmartCharging.API.Controllers
                 return BadRequest(e);
             }
 
-            return BadRequest();
+            return BadRequest(commandHandler.HandlerMessage);
         }
 
         [HttpDelete]
@@ -123,22 +126,23 @@ namespace SmartCharging.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RemoveChargeStationToGroupStationGroupById(string chargeStationId, string groupStationId)
         {
+            var commandHandler = new RemoveChargeStationToGroupStationGroupByIdCommandHandler(_groupRepository);
             try
             {
-                var result = await new RemoveChargeStationToGroupStationGroupByIdCommandHandler(_groupRepository).Execute(chargeStationId, groupStationId);
+                var result = await commandHandler.Execute(chargeStationId, groupStationId);
 
                 if (result)
                 {
-                    return Ok();
+                    return Ok(commandHandler.HandlerMessage);
                 }
             }
             catch (Exception e)
             {
-                _logger.Log(LogLevel.Trace, e, "GroupStationController.Add");
+                _logger.Log(LogLevel.Trace, e, "GroupStationController.RemoveChargeStationToGroupStationGroupById");
                 return BadRequest(e);
             }
 
-            return BadRequest();
+            return BadRequest(commandHandler.HandlerMessage);
         }
 
 

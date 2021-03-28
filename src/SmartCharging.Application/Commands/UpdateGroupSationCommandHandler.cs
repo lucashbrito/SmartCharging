@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmartCharging.Application.Commands
 {
-    public class UpdateGroupSationCommandHandler
+    public class UpdateGroupSationCommandHandler : BaseCommandHandler
     {
         private readonly IGroupRepository _groupRepository;
 
@@ -20,22 +20,23 @@ namespace SmartCharging.Application.Commands
 
         public async Task<bool> Execute(GroupStationInputModel groupStationInput, string groupId)
         {
-            var groupOld = await _groupRepository.GetGroupById(groupId);
+            var group = await _groupRepository.GetGroupById(groupId);
 
-            groupOld.SetName(groupStationInput.Name);
-            groupOld.SetCapacityAmps(groupStationInput.CapacityAmps);
-                      
+            group.SetName(groupStationInput.Name);
+            group.SetCapacityAmps(groupStationInput.CapacityAmps);
+
             Parallel.ForEach(groupStationInput.ChargeStations, chargeStation =>
             {
                 foreach (var connector in chargeStation.Connectors)
                 {
-                    groupOld.UpdateChargeStation(chargeStation.Name, connector.ChargeStationId, connector.MaxCurrentAmps);
+                    group.UpdateChargeStation(chargeStation.Name, connector.ChargeStationId, connector.MaxCurrentAmps);
                 }
             });
 
-            await _groupRepository.Update(groupId, groupOld);
+            await _groupRepository.Update(groupId, group);
 
-            return true;
-        }       
+            HandlerMessage = "the Group has updated";
+            return true;            
+        }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartCharging.Application.Commands
 {
-    public class RemoveChargeStationToGroupStationGroupByIdCommandHandler
+    public class RemoveChargeStationToGroupStationGroupByIdCommandHandler : BaseCommandHandler
     {
         private readonly IGroupRepository _groupRepository;
 
@@ -23,18 +23,16 @@ namespace SmartCharging.Application.Commands
 
             if (group == null)
             {
-                throw new DomainException("Cant find the groupStation");
-                //or
-                //return false;
+                HandlerMessage = "Cant find the groupStation";
+                return false;
             }
 
             var chargeStationRemoved = group.ChargeStations.FirstOrDefault(x => x.Id == chargeStationId);
 
             if (chargeStationRemoved == null)
             {
-                throw new DomainException("Cant find the charge station to remove");
-                //or
-                //return false;
+                HandlerMessage = "Cant find the charge station to remove";
+                return false;
             }
 
             group.ChargeStations.Remove(chargeStationRemoved);

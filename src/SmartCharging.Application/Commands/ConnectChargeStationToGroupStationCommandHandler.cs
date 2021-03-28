@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SmartCharging.Application.Commands
 {
-    public class ConnectChargeStationToGroupStationCommandHandler
+    public class ConnectChargeStationToGroupStationCommandHandler : BaseCommandHandler
     {
         private readonly IGroupRepository _groupRepository;
 
@@ -25,17 +25,16 @@ namespace SmartCharging.Application.Commands
 
             if (group == null)
             {
-                throw new DomainException("Can't add this station because the IdGroup doenst exist");
-                //or
-                //return false;
+                HandlerMessage = "Can't add this station because the IdGroup doenst exist";
+                return false;
             }
 
             var hasChargeStation = _groupRepository.GetChargeStationById(chargeStationInput.Id);
 
             if (hasChargeStation != null)
             {
-                throw new DomainException("The charge station already exist.");
-                //    return false;
+                HandlerMessage = "The charge station already exist.";
+                return false;
             }
 
             var chargeStation = new ChargeStation(chargeStationInput.Name);
@@ -46,6 +45,7 @@ namespace SmartCharging.Application.Commands
 
             await _groupRepository.Update(group.Id, group);
 
+            HandlerMessage = "the Connector has created";
             return true;
         }
 

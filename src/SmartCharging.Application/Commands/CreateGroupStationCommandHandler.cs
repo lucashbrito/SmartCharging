@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmartCharging.Application.Commands
 {
-    public class CreateGroupStationCommandHandler
+    public class CreateGroupStationCommandHandler : BaseCommandHandler
     {
         private readonly IGroupRepository _groupRepository;
 
@@ -31,9 +31,11 @@ namespace SmartCharging.Application.Commands
                 newChargStation.Connectors.AddRange(newConnectorList);
 
                 group.AddChargeStation(newChargStation);
-            });          
+            });
 
             await _groupRepository.Add(group);
+
+            HandlerMessage = "Group has been added";
 
             return true;
         }
