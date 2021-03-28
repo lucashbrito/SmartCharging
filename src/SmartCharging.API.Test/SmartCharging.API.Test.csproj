@@ -7,13 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="7.0.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SmartCharging.API\SmartCharging.API.csproj" />
+    <ProjectReference Include="..\SmartCharging.Application\SmartCharging.Application.csproj" />
     <ProjectReference Include="..\SmartCharging.Domain\SmartCharging.Domain.csproj" />
+    <ProjectReference Include="..\SmartCharging.Infrastructure\SmartCharging.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
