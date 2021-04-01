@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SmartCharging.Api.Filters;
 using SmartCharging.Api.Setup;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,8 @@ namespace SmartCharging.API
         {
             DependencyInjection.InjetcDataBase(services, Configuration);
 
+            services.AddSingleton<ILogger>(provider => provider.GetRequiredService<ILogger<ExceptionMiddleware>>());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -45,6 +48,8 @@ namespace SmartCharging.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmartCharging.API v1"));
             }
+
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseHttpsRedirection();
 
